@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.entity.Ticket">
+	<resultMap type="Ticket" id="Ticket">
+		<result property="ticketNO" column="ticket_no" jdbcType="VARCHAR" />
+		<result property="flightNO" column="flight_no" jdbcType="VARCHAR" />
+		<result property="seatNO" column="seat_no" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="findAllTicket" parameterType="HashMap" resultMap="Ticket">
+		select * from ticket;
+	</select>
+	<insert id="addTicket" parameterType="HashMap">
+		insert into ticket values(#{ticketNO},#{flightNO},#{seatNO});
+	</insert>
+	<delete id="delTicketByNO" parameterType="HashMap">
+		delete from ticket where ticket_no=#{ticketNO};
+	</delete>
+	<update id="updateTicketByNO" parameterType="HashMap">
+		update ticket set flight_no=#{flightNO},seat_no=#{seatNO} where ticket_no=#{ticketNO};
+	</update>
+</mapper>

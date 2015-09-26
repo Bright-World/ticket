@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	 http://www.springframework.org/schema/aop
+	 http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+     
+     <context:property-placeholder location="classpath:config.properties"/>
+     
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.druid.driver-class}" />
+		<property name="url" value="${jdbc.druid.driver-url}" />
+		<property name="username" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="${jdbc.druid.connection-initial-size}" />
+		<property name="minIdle" value="${jdbc.druid.connection-minimum-size}" />
+		<property name="maxActive" value="${jdbc.druid.connection-maximum-size}" />
+		<property name="maxWait" value="${jdbc.druid.connection-maxwait-time}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.druid.connection-maxactive-time}" />
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.druid.connection-minlive-time}" />
+		<property name="validationQuery" value="${jdbc.druid.connection-test-sql}" />
+		<property name="testWhileIdle" value="${jdbc.druid.test-while-idle}" />
+		<property name="testOnBorrow" value="${jdbc.druid.test-on-borrow}" />
+		<property name="testOnReturn" value="${jdbc.druid.test-on-return}" />
+		<property name="poolPreparedStatements" value="${jdbc.druid.pool-prepared-statements}" />
+		<property name="connectionProperties" value="config.decrypt=${jdbc.druid.config.decrypt}" />
+		<property name="filters" value="mergeStat,config" />
+	</bean>
+	
+	<!-- <context:component-scan base-package="com.dao" ></context:component-scan>
+	<context:component-scan base-package="com.handler" ></context:component-scan> -->
+	 
+     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+     	<property name="configLocation" value="classpath:SqlMapConfig.xml"></property>
+     	<property name="dataSource" ref="dataSource"></property>
+     	<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+     </bean>
+     
+     <bean id="myBatisDAO" class="com.dao.MyBatisDAO">
+     	<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+     </bean>
+</beans>
